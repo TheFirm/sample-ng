@@ -1,0 +1,118 @@
+<div class="right_side_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-xs-28">
+        <div ncy-breadcrumb></div>
+      </div>
+      <div class="col-xs-8">
+        <a ui-sref="modules.promotion" class="btn btn-success right_title_button">Add Promotion</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-36">
+        <div>
+          <table
+            class="table table-condensed table-striped table-hover table-bordered text-center admin_table promotions">
+            <thead>
+            <tr>
+              <th>
+                W.E.
+              </th>
+              <th>
+                Promotion level
+              </th>
+              <th>
+                Budget
+
+              </th>
+              <th>
+                Budget Used
+              </th>
+              <th>
+                Budget per Sale, $
+              </th>
+              <th colspan="4">
+                Comparing to average stats of previous 4 weeks
+              </th>
+              <th>
+                Status
+              </th>
+              <th>
+                Action
+              </th>
+            </tr>
+            <tr>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th></th>
+              <th>
+                Sales
+              </th>
+              <th>
+                Hours on a field
+              </th>
+              <th>
+                Days on a field
+              </th>
+              <th>
+                Headcount
+              </th>
+              <th></th>
+              <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="promotion in promotions.data $track by promotion.id">
+              <td ng-bind="(promotion.finished_at | formatDate) || 'N/A'"></td>
+              <td ng-bind="promotion.promotion_config.name || 'N/A'"></td>
+              <td ng-bind="promotion.budget || 'N/A'"></td>
+              <td ng-bind="promotion.budget_used || 'N/A'"></td>
+              <td ng-bind="promotion.budget_per_sale || 'N/A'"></td>
+              <td ng-bind="promotion.compare_sales || 'N/A'"></td>
+              <td ng-bind="promotion.compare_hours_on_field || 'N/A'"></td>
+              <td ng-bind="promotion.compare_days_on_a_field || 'N/A'"></td>
+              <td ng-bind="promotion.compare_head_count || 'N/A'"></td>
+              <td ng-switch on="promotion.status">
+                <span ng-switch-when="pending">Pending</span>
+                <span class="text-info" ng-switch-when="finished">Finished</span>
+                <span class="text-danger" ng-switch-when="canceled">Cancelled</span>
+                <span class="text-success" ng-switch-when="in_progress">In progress</span>
+              </td>
+              <td ng-switch on="promotion.status">
+                <button ng-click="cancelPromotion(promotion)"
+                        class="btn btn-xs btn-warning"
+                        ng-switch-when='in_progress'>
+                  Stop
+                </button>
+                <a class="btn btn-xs btn-primary"
+                   ui-sref="modules.promotion({id: promotion.id})"
+                   ng-switch-when='pending'>
+                  <i class="fa fa-pencil"></i>
+                </a>
+                <button ng-click="deletePromotion(promotion)"
+                        class="btn btn-xs btn-danger"
+                        ng-switch-when='pending'>
+                  <i class="fa fa-trash-o"></i>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div ng-if="promotions.totalItems == 0" class="text-center">
+            <p class="text-danger">Sorry, no results found</p>
+          </div>
+          <div ng-if="promotions.totalItems > itemsPerPage" class="text-center">
+            <pagination total-items="promotions.totalItems"
+                        max-size="paginationSize"
+                        items-per-page="itemsPerPage"
+                        ng-model="filterData.page"
+                        ng-change="applyFilter()">
+            </pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
